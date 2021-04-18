@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的文章</title>
+    <script src="jquery-1.9.1.min.js"></script>
+
+    <script>
+
+        var page = 1;
+        function mydel(id){
+            if(confirm("确认删除？")) {
+                jQuery.getJSON("mydel",{"id":id},function(data){
+                   if(data != null && data.succ == 1) {
+                       alert("删除成功");
+                       //刷新页面
+                       location.href = location.href;
+                   } else {
+                       alert("抱歉，失败！" + data.msg);
+                   }
+                });
+            }
+        }
+
+        //时间格式化
+        function datefm(timespan) {
+            var date = new Date(timespan);
+
+            //年
+            var y = date.getFullYear();
+            //月
+            var m = date.getMonth() + 1;
+            //日
+            var d = date.getDate();
+
+            return y + "-" + m + "-" + d;
+        }
+
+        //分页方法
+        function mypage(type) {
+            if(type == 1) {
+                if(page > 1) {
+                    location.href = "myartlist.html?p=" + (page - 1);
+                } else {
+                    alert("没有上一页");
+                }
+            } else {
+                location.href = "myartlist.html?p=" + (page + 1);
+            }
+        }
+        jQuery(function () {
+            var params = location.search;
+            if(params != "") {
+                //不在首页的情况下
+                page = parseInt(params.split("=")[1]);
+            }
+
+
+
+            // 1.去后台查询我的文章列表
+            jQuery.getJSON("myart", {"page":page,"psize":3}, function (data) {
+                // 2.将 table 信息进行替换（替换成后台数据）
+                if (data != null && data.succ == 1) {
+                    // 查询成功，动态拼接 table
+                    var html = "";
+                    for (var i = 0; i < data.list.length; i++) {
+                        var article = data.list[i];
+                        html += " <tr>\n" +
+                            "            <td>\n" +
+                            article.id + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            article.title + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            datefm(article.createtime) + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            article.rcount + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            "                <a href='upart.html?id="+ article.id +"'>修改</a>" +
+                            " <a href='javascript:mydel("+ article.id +")'>删除</a>\n" +
+                            "            </td>\n" +
+                            "        </tr>";
+                    }
+                    jQuery("#tab1").append(html);
+                } else {
+                    alert("操作失败：" + data.msg);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div style="margin-top: 50px;text-align: center;">
+    <h1>我的文章列表</h1>
+
+    <a href="addart.html">添加文章</a><p></p>
+
+    <table id="tab1" style="width: 100%;" border="3">
+        <tr>
+            <td>
+                编号
+            </td>
+            <td>
+                标题
+            </td>
+            <td>
+                发布时间
+            </td>
+            <td>
+                阅读数
+            </td>
+            <td>
+                操作
+            </td>
+        </tr>
+
+    </table>
+    <p></p>
+    <a href="javascript:mypage(1)">上一页</a>
+    <a href="javascript:mypage(2)">下一页</a>
+</div>
+
+</body>
+</html>
