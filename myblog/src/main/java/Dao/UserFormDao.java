@@ -26,7 +26,7 @@ public class UserFormDao {
     public UserInfo getUser(String username, String password) throws SQLException {
         UserInfo userInfo = new UserInfo();
         Connection connection = DBUtils.getConnection();
-        String sql = "select * from userform where username =? and password =?";
+        String sql = "select * from userform where username =? and password=?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,username);
         statement.setString(2,password);

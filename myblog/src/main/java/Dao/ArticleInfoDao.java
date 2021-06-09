@@ -41,7 +41,7 @@ public class ArticleInfoDao {
         int result = 0;
         if(id > 0) {
             Connection connection = DBUtils.getConnection();
-            String sql = "delete from articleform where id = ?";
+            String sql = "delete from articleform where id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,id);
             result = statement.executeUpdate();
@@ -56,7 +56,7 @@ public class ArticleInfoDao {
         ArticleInfoVo articleInfo = new ArticleInfoVo();
         if(id > 0) {
             Connection connection = DBUtils.getConnection();
-            String sql = "select a.*,u.username from articleform a left join userform u on a.uid = u.id where a.uid = ?";
+            String sql = "select a.*,u.username from articleform a left join userform u on a.uid = u.id where a.uid=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,id);
             ResultSet resultSet = statement.executeQuery();
@@ -132,7 +132,7 @@ public class ArticleInfoDao {
     public int upRcount(int id) throws SQLException {
         int result = 0;
         Connection connection = DBUtils.getConnection();
-        String sql = "update articleform set rcount = rcount + 1 where id = ?";
+        String sql = "update articleform set rcount = rcount + 1 where id=?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1,id);
         result = statement.executeUpdate();
